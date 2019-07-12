@@ -12,11 +12,11 @@ const APP_PORT: number = 3000;
 // The libdefs don't like it, but it's fine.  $FlowFixMe https://webpack.js.org/api/node/
 const compiler: webpack.Compiler = webpack({
     mode: 'development',
-    entry: ['whatwg-fetch', path.resolve(__dirname, 'js', 'app.js')],
+    entry: ['whatwg-fetch', path.resolve(__dirname, 'client/src', 'app.js')],
     module: {
         rules: [
             {
-                test: /\.js$/,
+                test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
                 use: {
                     loader: 'babel-loader',

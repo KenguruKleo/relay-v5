@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "start": "babel-node ./server.js",
     "build": "relay-compiler --src ./client/src --schema ./data/schema.graphql --extensions js jsx",
     "update-schema": "babel-node ./scripts/updateSchema.js"
   },
@@ -22,6 +23,7 @@
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.4.4",
+    "babel-loader": "^8.0.6",
     "babel-plugin-relay": "^5.0.0",
     "graphql": "^14.4.2",
     "relay-compiler": "^5.0.0"
