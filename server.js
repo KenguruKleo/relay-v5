@@ -32,7 +32,7 @@ const compiler: webpack.Compiler = webpack({
 
 const app: WebpackDevServer = new WebpackDevServer(compiler, {
     contentBase: '/public/',
-    publicPath: '/js/',
+    publicPath: '/client/bundle/',
     stats: {colors: true},
 });
 
