@@ -1,10 +1,12 @@
 {
   "scripts": {
-    "relay": "relay-compiler --src ./src --schema ./schema.graphql --extensions js jsx"
+    "build": "relay-compiler --src ./client/src --schema ./data/schema.graphql --extensions js jsx",
+    "update-schema": "babel-node ./scripts/updateSchema.js"
   },
   "dependencies": {
     "express": "^4.17.1",
     "express-graphql": "^0.8.0",
+    "graphql-relay": "^0.6.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-relay": "^5.0.0",
@@ -12,6 +14,14 @@
     "webpack-dev-server": "^3.7.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.5.4",
+    "@babel/node": "^7.5.0",
+    "@babel/plugin-proposal-class-properties": "^7.5.0",
+    "@babel/plugin-transform-runtime": "^7.5.0",
+    "@babel/preset-env": "^7.5.4",
+    "@babel/preset-flow": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/register": "^7.4.4",
     "babel-plugin-relay": "^5.0.0",
     "graphql": "^14.4.2",
     "relay-compiler": "^5.0.0"
