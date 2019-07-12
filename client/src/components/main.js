@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 
 class Main extends React.Component {
-    render() {
+    render () {
         return (
             <div>
                 <h1>Relay</h1>
