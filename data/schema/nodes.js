@@ -6,8 +6,8 @@ import {
     GraphQLInt,
     GraphQLNonNull,
     GraphQLObjectType,
-    GraphQLString
-} from "graphql";
+    GraphQLString,
+} from 'graphql';
 
 import {
     connectionArgs,
@@ -15,8 +15,8 @@ import {
     connectionFromArray,
     fromGlobalId,
     globalIdField,
-    nodeDefinitions
-} from "graphql-relay";
+    nodeDefinitions,
+} from 'graphql-relay';
 
 import {
     Todo,
@@ -24,17 +24,17 @@ import {
     USER_ID,
     getTodoOrThrow,
     getTodos,
-    getUserOrThrow
-} from "../database";
+    getUserOrThrow,
+} from '../database';
 
 // $FlowFixMe graphql-relay types not available in flow-typed, strengthen this typing
 const { nodeInterface, nodeField } = nodeDefinitions(
     (globalId: string): ?{} => {
         const { type, id }: { id: string, type: string } = fromGlobalId(globalId);
 
-        if (type === "Todo") {
+        if (type === 'Todo') {
             return getTodoOrThrow(id);
-        } else if (type === "User") {
+        } else if (type === 'User') {
             return getUserOrThrow(id);
         }
         return null;
@@ -50,45 +50,45 @@ const { nodeInterface, nodeField } = nodeDefinitions(
 );
 
 const GraphQLTodo = new GraphQLObjectType({
-    name: "Todo",
+    name: 'Todo',
     fields: {
-        id: globalIdField("Todo"),
+        id: globalIdField('Todo'),
         text: {
             type: new GraphQLNonNull(GraphQLString),
-            resolve: (todo: Todo): string => todo.text
+            resolve: (todo: Todo): string => todo.text,
         },
         complete: {
             type: new GraphQLNonNull(GraphQLBoolean),
-            resolve: (todo: Todo): boolean => todo.complete
-        }
+            resolve: (todo: Todo): boolean => todo.complete,
+        },
     },
-    interfaces: [nodeInterface]
+    interfaces: [nodeInterface],
 });
 
 const {
     connectionType: TodosConnection,
-    edgeType: GraphQLTodoEdge
+    edgeType: GraphQLTodoEdge,
 } = connectionDefinitions({
-    name: "Todo",
-    nodeType: GraphQLTodo
+    name: 'Todo',
+    nodeType: GraphQLTodo,
 });
 
 const GraphQLUser = new GraphQLObjectType({
-    name: "User",
+    name: 'User',
     fields: {
-        id: globalIdField("User"),
+        id: globalIdField('User'),
         userId: {
             type: new GraphQLNonNull(GraphQLString),
-            resolve: (): string => USER_ID
+            resolve: (): string => USER_ID,
         },
         todos: {
             type: TodosConnection,
             args: {
                 status: {
                     type: GraphQLString,
-                    defaultValue: "any"
+                    defaultValue: 'any',
                 },
-                ...connectionArgs
+                ...connectionArgs,
             },
             // eslint-disable-next-line flowtype/require-parameter-type
             resolve: (root: {}, { status, after, before, first, last }) =>
@@ -96,19 +96,19 @@ const GraphQLUser = new GraphQLObjectType({
                     after,
                     before,
                     first,
-                    last
-                })
+                    last,
+                }),
         },
         totalCount: {
             type: new GraphQLNonNull(GraphQLInt),
-            resolve: (): number => getTodos().length
+            resolve: (): number => getTodos().length,
         },
         completedCount: {
             type: new GraphQLNonNull(GraphQLInt),
-            resolve: (): number => getTodos("completed").length
-        }
+            resolve: (): number => getTodos('completed').length,
+        },
     },
-    interfaces: [nodeInterface]
+    interfaces: [nodeInterface],
 });
 
 export { nodeField, GraphQLTodo, GraphQLTodoEdge, GraphQLUser };

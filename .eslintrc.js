@@ -34,6 +34,8 @@ module.exports = {
 
         "indent": ["error", 4, {"SwitchCase": 1}],
         "max-len": ["error", { "code": 120 }],
+        "quotes": ["error", "single"],
+        "comma-dangle": ["error", "always-multiline"]
     },
     settings: {
         react: {

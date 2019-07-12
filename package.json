@@ -1,7 +1,8 @@
 {
   "scripts": {
     "start": "babel-node ./server.js",
-    "build": "relay-compiler --src ./client/src --schema ./data/schema.graphql --extensions js jsx",
+    "relay": "relay-compiler --src ./client/src/ --schema ./data/schema.graphql",
+    "flow-typed": "flow-typed install --flowVersion=0.94.0",
     "update-schema": "babel-node ./scripts/updateSchema.js",
     "lint": "eslint ."
   },
@@ -12,6 +13,7 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-relay": "^5.0.0",
+    "relay-runtime": "^5.0.0",
     "webpack": "^4.35.3",
     "webpack-dev-server": "^3.7.2",
     "whatwg-fetch": "^3.0.0"

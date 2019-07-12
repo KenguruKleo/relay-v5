@@ -1,17 +1,17 @@
 // @flow
-import { GraphQLObjectType, GraphQLSchema } from "graphql";
+import { GraphQLObjectType, GraphQLSchema } from 'graphql';
 
-import { nodeField } from "./nodes.js";
-import { UserQuery } from "./queries/UserQuery";
+import { nodeField } from './nodes.js';
+import { UserQuery } from './queries/UserQuery';
 
 const Query = new GraphQLObjectType({
-    name: "Query",
+    name: 'Query',
     fields: {
         user: UserQuery,
-        node: nodeField
-    }
+        node: nodeField,
+    },
 });
 
 export const schema = new GraphQLSchema({
-    query: Query
+    query: Query,
 });

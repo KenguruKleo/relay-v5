@@ -20,7 +20,7 @@ export class User {
 }
 
 // Mock authenticated ID
-export const USER_ID = "me";
+export const USER_ID = 'me';
 
 // Mock user database table
 const usersById: Map<string, User> = new Map([[USER_ID, new User(USER_ID)]]);
@@ -28,13 +28,13 @@ const usersById: Map<string, User> = new Map([[USER_ID, new User(USER_ID)]]);
 // Mock todo database table
 const todosById: Map<string, Todo> = new Map();
 const todoIdsByUser: Map<string, $ReadOnlyArray<string>> = new Map([
-    [USER_ID, []]
+    [USER_ID, []],
 ]);
 
 // Seed initial data
 let nextTodoId: number = 0;
-addTodo("Taste JavaScript", true);
-addTodo("Buy a unicorn", false);
+addTodo('Taste JavaScript', true);
+addTodo('Buy a unicorn', false);
 
 function getTodoIdsForUser (id: string): $ReadOnlyArray<string> {
     return todoIdsByUser.get(id) || [];
@@ -72,16 +72,16 @@ export function getTodoOrThrow (id: string): Todo {
     return todo;
 }
 
-export function getTodos (status: string = "any"): $ReadOnlyArray<Todo> {
+export function getTodos (status: string = 'any'): $ReadOnlyArray<Todo> {
     const todoIdsForUser = getTodoIdsForUser(USER_ID);
     const todosForUser = todoIdsForUser.map(getTodoOrThrow);
 
-    if (status === "any") {
+    if (status === 'any') {
         return todosForUser;
     }
 
     return todosForUser.filter(
-        (todo: Todo): boolean => todo.complete === (status === "completed")
+        (todo: Todo): boolean => todo.complete === (status === 'completed')
     );
 }
 
