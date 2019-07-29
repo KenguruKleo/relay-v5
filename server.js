@@ -14,6 +14,7 @@ const APP_PORT: number = 3000;
 const compiler: webpack.Compiler = webpack({
     mode: 'development',
     entry: ['whatwg-fetch', path.resolve(__dirname, 'client/src', 'app.js')],
+    devtool: 'inline-source-map',
     module: {
         rules: [
             {

@@ -6,7 +6,8 @@ class Main extends React.Component {
         return (
             <div>
                 <h1>Relay</h1>
-                <User/>
+                <User userId="me" />
+                <hr />
             </div>
         );
     }
