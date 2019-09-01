@@ -3,11 +3,13 @@ export class Todo {
   +id: string;
   +text: string;
   +complete: boolean;
+  +userId: string;
 
-  constructor (id: string, text: string, complete: boolean) {
+  constructor ({id, complete, text, userId}: { complete: boolean, id: string, text: string, userId: string }) {
       this.id = id;
       this.text = text;
       this.complete = complete;
+      this.userId = userId;
   }
 }
 
@@ -19,33 +21,42 @@ export class User {
   }
 }
 
-// Mock authenticated ID
-export const USER_ID = 'me';
-
 // Mock user database table
-const usersById: Map<string, User> = new Map([[USER_ID, new User(USER_ID)]]);
+const usersById: Map<string, User> = new Map([
+    ['me', new User('me')],
+    ['you', new User('you')],
+]);
 
 // Mock todo database table
 const todosById: Map<string, Todo> = new Map();
 const todoIdsByUser: Map<string, $ReadOnlyArray<string>> = new Map([
-    [USER_ID, []],
+    ['me', []],
+    ['you', []],
 ]);
 
 // Seed initial data
 let nextTodoId: number = 0;
-addTodo('Taste JavaScript', true);
-addTodo('Buy a unicorn', false);
+addTodo('me', 'Taste JavaScript', true);
+addTodo('me', 'Buy a unicorn', false);
+addTodo('you', 'Test you', false);
+addTodo('you', 'Test second', true);
+addTodo('you', 'Third test', true);
 
 function getTodoIdsForUser (id: string): $ReadOnlyArray<string> {
     return todoIdsByUser.get(id) || [];
 }
 
-export function addTodo (text: string, complete: boolean): string {
-    const todo = new Todo(`${nextTodoId++}`, text, complete);
+export function addTodo (userId: string, text: string, complete: boolean): string {
+    const todo = new Todo({
+        id: `${nextTodoId++}`,
+        text,
+        complete,
+        userId,
+    });
     todosById.set(todo.id, todo);
 
-    const todoIdsForUser = getTodoIdsForUser(USER_ID);
-    todoIdsByUser.set(USER_ID, todoIdsForUser.concat(todo.id));
+    const todoIdsForUser = getTodoIdsForUser(userId);
+    todoIdsByUser.set(userId, todoIdsForUser.concat(todo.id));
 
     return todo.id;
 }
@@ -72,8 +83,8 @@ export function getTodoOrThrow (id: string): Todo {
     return todo;
 }
 
-export function getTodos (status: string = 'any'): $ReadOnlyArray<Todo> {
-    const todoIdsForUser = getTodoIdsForUser(USER_ID);
+export function getTodosForUser (userId: string, status: string = 'any'): $ReadOnlyArray<Todo> {
+    const todoIdsForUser = getTodoIdsForUser(userId);
     const todosForUser = todoIdsForUser.map(getTodoOrThrow);
 
     if (status === 'any') {
@@ -90,6 +101,12 @@ function getUser (id: string): ?User {
     return usersById.get(id);
 }
 
+export function getUsers (): [User] {
+    const res = [...usersById.values()];
+    console.log('res', res);
+    return res;
+}
+
 export function getUserOrThrow (id: string): User {
     const user = getUser(id);
 
@@ -100,8 +117,8 @@ export function getUserOrThrow (id: string): User {
     return user;
 }
 
-export function markAllTodos (complete: boolean): $ReadOnlyArray<string> {
-    const todosToChange = getTodos().filter(
+export function markAllTodosForUser (userId: string, complete: boolean): $ReadOnlyArray<string> {
+    const todosToChange = getTodosForUser(userId).filter(
         (todo: Todo): boolean => todo.complete !== complete
     );
 
@@ -113,11 +130,13 @@ export function markAllTodos (complete: boolean): $ReadOnlyArray<string> {
 }
 
 export function removeTodo (id: string) {
-    const todoIdsForUser = getTodoIdsForUser(USER_ID);
+    const todo = getTodoOrThrow(id);
+    const userId = todo.userId;
+    const todoIdsForUser = getTodoIdsForUser(userId);
 
     // Remove from the users list
     todoIdsByUser.set(
-        USER_ID,
+        userId,
         todoIdsForUser.filter((todoId: string): boolean => todoId !== id)
     );
 
@@ -125,16 +144,16 @@ export function removeTodo (id: string) {
     todosById.delete(id);
 }
 
-export function removeCompletedTodos (): $ReadOnlyArray<string> {
-    const todoIdsForUser = getTodoIdsForUser(USER_ID);
+export function removeCompletedTodosForUser (userId: string): $ReadOnlyArray<string> {
+    const todoIdsForUser = getTodoIdsForUser(userId);
 
-    const todoIdsToRemove = getTodos()
+    const todoIdsToRemove = getTodosForUser(userId)
         .filter((todo: Todo): boolean => todo.complete)
         .map((todo: Todo): string => todo.id);
 
     // Remove from the users list
     todoIdsByUser.set(
-        USER_ID,
+        userId,
         todoIdsForUser.filter(
             (todoId: string): boolean => !todoIdsToRemove.includes(todoId)
         )

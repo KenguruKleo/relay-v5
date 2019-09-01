@@ -1,18 +1,41 @@
 // @flow
 import { GraphQLString } from 'graphql';
-import { GraphQLUser } from '../nodes';
-import { User, getUserOrThrow } from '../../database';
+import { UsersConnection } from '../types/GraphQLUser';
+import { User, getUserOrThrow, getUsers } from '../../database';
+import {
+    connectionArgs,
+    connectionFromArray,
+
+} from 'graphql-relay';
+import {GraphQLUser} from '../types/GraphQLUser';
 
 type Input = {
-  +id: string
+    +userId: string,
+    ...args
 };
 
 const UserQuery = {
     type: GraphQLUser,
     args: {
-        id: { type: GraphQLString },
+        userId: { type: GraphQLString },
     },
-    resolve: (root: {}, { id }: Input): User => getUserOrThrow(id),
+    resolve: (root: {}, { userId }: Input): User => getUserOrThrow(userId),
 };
 
-export { UserQuery };
+const UsersQuery = {
+    type: UsersConnection,
+    args: {
+        userId: {
+            type: GraphQLString,
+        },
+        ...connectionArgs,
+    },
+    resolve: (root: {}, { userId, ...args }: Input): UsersConnection =>
+        connectionFromArray(
+            userId ? [getUserOrThrow(userId)] : getUsers(),
+            args
+        ),
+
+};
+
+export { UserQuery, UsersQuery };

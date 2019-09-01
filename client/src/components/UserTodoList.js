@@ -26,11 +26,12 @@ class UserTodoList extends React.Component<Props> {
                     checked={totalCount === completedCount}
                     type="checkbox"
                 />
-                <ul>
+                <ul className="todo-list">
                     {todos.edges.map((edge: { key: string, todo: Todo_todo }) =>
                         <Todo
                             key={edge.node.id}
                             todo={edge.node}
+                            user={this.props.userTodoList}
                         />
                     )}
                 </ul>
@@ -55,8 +56,10 @@ export default createFragmentContainer(
                     },
                 },
                 id,
+                userId,
                 totalCount,
-                completedCount,
+                completedCount
+                ...Todo_user,
             }
         `,
     },

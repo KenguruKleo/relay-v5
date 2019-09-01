@@ -19,6 +19,7 @@ export default class User extends React.Component<Props> {
                   query User_Query($userId: String) {
                     user(id: $userId) {
                       id,
+                      userId,
                       ...UserTodoList_userTodoList
                     }  
                   }

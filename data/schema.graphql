@@ -1,3 +1,20 @@
+input ChangeTodoStatusInput {
+  complete: Boolean!
+  id: ID!
+  userId: ID!
+  clientMutationId: String
+}
+
+type ChangeTodoStatusPayload {
+  todo: Todo!
+  user: User!
+  clientMutationId: String
+}
+
+type Mutation {
+  changeTodoStatus(input: ChangeTodoStatusInput!): ChangeTodoStatusPayload
+}
+
 """An object with an ID"""
 interface Node {
   """The id of the object."""
@@ -20,7 +37,8 @@ type PageInfo {
 }
 
 type Query {
-  user(id: String): User
+  user(userId: String): User
+  users(userId: String, after: String, first: Int, before: String, last: Int): UserConnection
 
   """Fetches an object given its ID"""
   node(
@@ -34,6 +52,7 @@ type Todo implements Node {
   id: ID!
   text: String!
   complete: Boolean!
+  userId: String!
 }
 
 """A connection to a list of items."""
@@ -61,4 +80,22 @@ type User implements Node {
   todos(status: String = "any", after: String, first: Int, before: String, last: Int): TodoConnection
   totalCount: Int!
   completedCount: Int!
+}
+
+"""A connection to a list of items."""
+type UserConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [UserEdge]
+}
+
+"""An edge in a connection."""
+type UserEdge {
+  """The item at the end of the edge"""
+  node: User
+
+  """A cursor for use in pagination"""
+  cursor: String!
 }
